@@ -1,0 +1,15 @@
+# Compiled class file
+*.class
+
+# Default ignored files
+/shelf/
+/workspace.xml
+target
+.settings
+.project
+.classpath
+/bin/
+*.idea/
+*.iml
+*.log
+*.jar
