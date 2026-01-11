@@ -80,6 +80,11 @@ java -jar ./target/quarkus-app/quarkus-run.jar
 Navigate to:
 <http://localhost:8080/q/swagger-ui>
 
+## Access the application health check
+
+Navigate to:
+<http://localhost:8080/health>
+
 ## See the demo in your browser
 
 Navigate to:
