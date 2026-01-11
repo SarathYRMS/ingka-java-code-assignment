@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 
 @QuarkusTest
-class StoreEndpointTest {
+class StoreEndpointIT {
 
     private static final String PATH = "stores";
     @Test
@@ -42,7 +42,7 @@ class StoreEndpointTest {
     }
 
     @Test
-    void testCreateStores() {
+    void testCreateUpdateAndDeleteStores() {
         String requestBody = "{\"name\": \"VLEUTEN\", \"quantityProductsInStock\": 10}";
 
         given()
@@ -55,6 +55,23 @@ class StoreEndpointTest {
                 .body(
                         containsString("VLEUTEN"),
                         containsString("10"));
+
+        String updateRequestBody = "{\"name\": \"UTRECHT\", \"quantityProductsInStock\": 10}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(updateRequestBody)
+                .when()
+                .put(PATH+"/4")
+                .then()
+                .statusCode(200)
+                .body(
+                        containsString("UTRECHT"),
+                        containsString("10"));
+
+        // Delete the UTRECHT:
+        given().when().delete(PATH + "/4").then().statusCode(204);
+
     }
 
     @Test
