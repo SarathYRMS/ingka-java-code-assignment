@@ -75,6 +75,10 @@ java -jar ./target/quarkus-app/quarkus-run.jar
     Have a look at how fast it boots.
     Or measure total native memory consumption...
 
+## Access the application through Swagger UI
+
+Navigate to:
+<http://localhost:8080/q/swagger-ui>
 
 ## See the demo in your browser
 

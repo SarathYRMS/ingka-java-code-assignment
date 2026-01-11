@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
+import lombok.Getter;
 import org.mapstruct.Mapper;
 
 import com.fulfilment.application.monolith.warehouses.adapters.database.DbWarehouse;
@@ -12,11 +13,8 @@ import com.fulfilment.application.monolith.warehouses.domain.models.Warehouse;
 @Mapper(componentModel = "cdi")
 public abstract class WarehouseMapper {
 
+    @Getter
     private final static WarehouseMapper INSTANCE = org.mapstruct.factory.Mappers.getMapper(WarehouseMapper.class);
-
-    public static WarehouseMapper getINSTANCE() {
-        return INSTANCE;
-    }
 
     public abstract Warehouse toDomainWarehouse(com.warehouse.api.beans.Warehouse warehouse);
 

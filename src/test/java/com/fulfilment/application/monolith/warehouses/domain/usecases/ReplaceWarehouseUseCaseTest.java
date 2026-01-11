@@ -14,7 +14,7 @@ import com.fulfilment.application.monolith.warehouses.domain.ports.WarehouseStor
 import com.fulfilment.application.monolith.warehouses.domain.validation.WarehouseValidation;
 import com.fulfilment.application.monolith.warehouses.exception.WarehouseException;
 
-public class ReplaceWarehouseUseCaseTest {
+class ReplaceWarehouseUseCaseTest {
     private WarehouseStore warehouseStore;
     private WarehouseValidation warehouseValidation;
     private ReplaceWarehouseUseCase replaceWarehouseUseCase;
@@ -40,10 +40,10 @@ public class ReplaceWarehouseUseCaseTest {
         Warehouse newWarehouse = new Warehouse();
         Warehouse oldWarehouse = new Warehouse();
         when(warehouseStore.findByBusinessUnitCode(newWarehouse.getBusinessUnitCode())).thenReturn(oldWarehouse);
-        when(warehouseValidation.checkLocationAndWarehouseFeasibility(newWarehouse)).thenReturn(false);
+        when(warehouseValidation.isLocationAndWarehouseFeasible(newWarehouse)).thenReturn(false);
 
         assertThrows(WarehouseException.class, () -> replaceWarehouseUseCase.replace(newWarehouse));
-        verify(warehouseValidation, times(1)).checkLocationAndWarehouseFeasibility(newWarehouse);
+        verify(warehouseValidation, times(1)).isLocationAndWarehouseFeasible(newWarehouse);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class ReplaceWarehouseUseCaseTest {
         oldWarehouse.setStock(100);
         newWarehouse.setStock(200);
         when(warehouseStore.findByBusinessUnitCode(newWarehouse.getBusinessUnitCode())).thenReturn(oldWarehouse);
-        when(warehouseValidation.checkLocationAndWarehouseFeasibility(newWarehouse)).thenReturn(true);
+        when(warehouseValidation.isLocationAndWarehouseFeasible(newWarehouse)).thenReturn(true);
 
         assertThrows(WarehouseException.class, () -> replaceWarehouseUseCase.replace(newWarehouse));
     }
@@ -66,7 +66,7 @@ public class ReplaceWarehouseUseCaseTest {
         newWarehouse.setStock(100);
         newWarehouse.setCapacity(50);
         when(warehouseStore.findByBusinessUnitCode(newWarehouse.getBusinessUnitCode())).thenReturn(oldWarehouse);
-        when(warehouseValidation.checkLocationAndWarehouseFeasibility(newWarehouse)).thenReturn(true);
+        when(warehouseValidation.isLocationAndWarehouseFeasible(newWarehouse)).thenReturn(true);
 
         assertThrows(WarehouseException.class, () -> replaceWarehouseUseCase.replace(newWarehouse));
     }
@@ -79,11 +79,11 @@ public class ReplaceWarehouseUseCaseTest {
         newWarehouse.setStock(100);
         newWarehouse.setCapacity(200);
         when(warehouseStore.findByBusinessUnitCode(newWarehouse.getBusinessUnitCode())).thenReturn(oldWarehouse);
-        when(warehouseValidation.checkLocationAndWarehouseFeasibility(newWarehouse)).thenReturn(true);
+        when(warehouseValidation.isLocationAndWarehouseFeasible(newWarehouse)).thenReturn(true);
 
         replaceWarehouseUseCase.replace(newWarehouse);
 
         verify(warehouseStore, times(1)).update(newWarehouse);
-        verify(warehouseValidation, times(1)).checkLocationAndWarehouseFeasibility(newWarehouse);
+        verify(warehouseValidation, times(1)).isLocationAndWarehouseFeasible(newWarehouse);
     }
 }

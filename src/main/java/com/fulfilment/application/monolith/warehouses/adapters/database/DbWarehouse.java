@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,19 +13,22 @@ import java.time.LocalDateTime;
 @Cacheable
 public class DbWarehouse {
 
-  @Id @GeneratedValue public Long id;
+    @Id
+    @GeneratedValue
+    public Long id;
 
-  public String businessUnitCode;
+    public String businessUnitCode;
 
-  public String location;
+    public String location;
 
-  public Integer capacity;
+    public Integer capacity;
 
-  public Integer stock;
+    public Integer stock;
 
-  public LocalDateTime createdAt = LocalDateTime.now();
+    public LocalDateTime createdAt = LocalDateTime.now();
 
-  public LocalDateTime archivedAt;
+    public LocalDateTime archivedAt;
 
-  public DbWarehouse() {}
+    public DbWarehouse() {
+    }
 }

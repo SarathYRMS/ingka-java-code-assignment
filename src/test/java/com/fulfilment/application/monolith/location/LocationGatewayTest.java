@@ -7,20 +7,20 @@ import org.junit.jupiter.api.Test;
 
 import com.fulfilment.application.monolith.warehouses.domain.models.Location;
 
-public class LocationGatewayTest {
-
-  @Test
-  public void testWhenResolveExistingLocationShouldReturnSuccess() {
-    // given
-     LocationGateway locationGateway = new LocationGateway();
-    // when
-     Location location = locationGateway.resolveByIdentifier("ZWOLLE-001");
-    // then
-     assertEquals(location.identification, "ZWOLLE-001");
-  }
+class LocationGatewayTest {
 
     @Test
-    public void testWhenResolveNonExistingLocationShouldReturnException() {
+    void testWhenResolveExistingLocationShouldReturnSuccess() {
+        // given
+        LocationGateway locationGateway = new LocationGateway();
+        // when
+        Location location = locationGateway.resolveByIdentifier("ZWOLLE-001");
+        // then
+        assertEquals(location.identification, "ZWOLLE-001");
+    }
+
+    @Test
+    void testWhenResolveNonExistingLocationShouldReturnException() {
         // given
         LocationGateway locationGateway = new LocationGateway();
 
@@ -31,7 +31,7 @@ public class LocationGatewayTest {
     }
 
     @Test
-    public void testWhenResolveLocationWithNullIdentifier() {
+    void testWhenResolveLocationWithNullIdentifier() {
         // given
         LocationGateway locationGateway = new LocationGateway();
         // when & then
@@ -41,7 +41,7 @@ public class LocationGatewayTest {
     }
 
     @Test
-    public void testWhenResolveLocationWithEmptyIdentifier() {
+    void testWhenResolveLocationWithEmptyIdentifier() {
         // given
         LocationGateway locationGateway = new LocationGateway();
         // when & then

@@ -1,5 +1,6 @@
 package com.fulfilment.application.monolith.warehouses.domain.validation;
 
+import com.fulfilment.application.monolith.util.Constants;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import com.fulfilment.application.monolith.warehouses.domain.models.Location;
@@ -19,34 +20,35 @@ public class WarehouseValidation {
         this.locationResolver = locationResolver;
     }
 
-    public Warehouse validateWarehouse(Warehouse warehouse) {
+    public void validateWarehouse(Warehouse warehouse) {
         var isBusinessCodeExist = warehouseStore.checkWarehouseBusinessCodeExists(warehouse.getBusinessUnitCode());
         if (isBusinessCodeExist) {
-            throw new WarehouseException("A warehouse with the specified business unit code already exists.", 400);
+            throw new WarehouseException(String.format(Constants.BUSINESS_CODE_EXISTS, warehouse.getBusinessUnitCode()), 400);
         }
 
-        if (checkLocationAndWarehouseFeasibility(warehouse)) {
+        if (isLocationAndWarehouseFeasible(warehouse)) {
             if (warehouse.getStock() > warehouse.getCapacity()) {
-                throw new WarehouseException("The warehouse stock cannot exceed its capacity.", 400);
+                throw new WarehouseException(Constants.WAREHOUSE_EXCEEDS_CAPACITY, 400);
             }
-            return warehouse;
+
+        } else {
+            throw new WarehouseException(Constants.VALIDATION_FAILED, 400);
         }
-        return null;
     }
 
-    public Boolean checkLocationAndWarehouseFeasibility(Warehouse warehouse) {
+    public Boolean isLocationAndWarehouseFeasible(Warehouse warehouse) {
         Location location = locationResolver.resolveByIdentifier(warehouse.getLocation());
         if (location == null) {
-            throw new WarehouseException("The specified location is invalid.", 400);
+            throw new WarehouseException(Constants.INVALID_LOCATION, 400);
         }
 
         var countAllWarehousesByBuCode = warehouseStore.countAllWarehousesByBuCode(warehouse.getBusinessUnitCode());
-        if ( countAllWarehousesByBuCode >= location.maxNumberOfWarehouses) {
-            throw new WarehouseException("The maximum number of warehouses for this location has been reached.", 400);
+        if (countAllWarehousesByBuCode >= location.maxNumberOfWarehouses) {
+            throw new WarehouseException(Constants.MAX_NO_OF_WAREHOUSES_REACHED, 400);
         }
 
         if (warehouse.getCapacity() > location.maxCapacity) {
-            throw new WarehouseException("The warehouse capacity exceeds the maximum capacity for this location.", 400);
+            throw new WarehouseException(Constants.WAREHOUSE_CAPACITY_EXCEEDS_MAX_CAPACITY, 400);
         }
         return true;
     }

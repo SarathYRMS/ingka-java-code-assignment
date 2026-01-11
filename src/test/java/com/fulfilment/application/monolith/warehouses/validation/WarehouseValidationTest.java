@@ -42,7 +42,7 @@ class WarehouseValidationTest {
         warehouse.setLocation("InvalidLocation");
         when(locationResolver.resolveByIdentifier("InvalidLocation")).thenReturn(null);
 
-        assertThrows(WarehouseException.class, () -> warehouseValidation.checkLocationAndWarehouseFeasibility(warehouse));
+        assertThrows(WarehouseException.class, () -> warehouseValidation.isLocationAndWarehouseFeasible(warehouse));
         verify(locationResolver, times(1)).resolveByIdentifier("InvalidLocation");
     }
 
@@ -55,7 +55,7 @@ class WarehouseValidationTest {
         when(locationResolver.resolveByIdentifier("ValidLocation")).thenReturn(location);
         when(warehouseStore.countAllWarehousesByBuCode("BU123")).thenReturn(5);
 
-        assertThrows(WarehouseException.class, () -> warehouseValidation.checkLocationAndWarehouseFeasibility(warehouse));
+        assertThrows(WarehouseException.class, () -> warehouseValidation.isLocationAndWarehouseFeasible(warehouse));
         verify(locationResolver, times(1)).resolveByIdentifier("ValidLocation");
         verify(warehouseStore, times(1)).countAllWarehousesByBuCode("BU123");
     }
@@ -68,7 +68,7 @@ class WarehouseValidationTest {
         Location location = new Location("ValidLocation", 10, 100);
         when(locationResolver.resolveByIdentifier("ValidLocation")).thenReturn(location);
 
-        assertThrows(WarehouseException.class, () -> warehouseValidation.checkLocationAndWarehouseFeasibility(warehouse));
+        assertThrows(WarehouseException.class, () -> warehouseValidation.isLocationAndWarehouseFeasible(warehouse));
         verify(locationResolver, times(1)).resolveByIdentifier("ValidLocation");
     }
 
@@ -97,12 +97,11 @@ class WarehouseValidationTest {
         when(locationResolver.resolveByIdentifier("ValidLocation")).thenReturn(location);
         when(warehouseStore.countAllWarehousesByBuCode("BU123")).thenReturn(5);
 
-        Warehouse validatedWarehouse = warehouseValidation.validateWarehouse(warehouse);
+        warehouseValidation.validateWarehouse(warehouse);
 
         verify(warehouseStore, times(1)).checkWarehouseBusinessCodeExists("BU123");
         verify(locationResolver, times(1)).resolveByIdentifier("ValidLocation");
         verify(warehouseStore, times(1)).countAllWarehousesByBuCode("BU123");
-        assert validatedWarehouse != null;
     }
 
     @Test
@@ -116,7 +115,7 @@ class WarehouseValidationTest {
         when(locationResolver.resolveByIdentifier("ValidLocation")).thenReturn(location);
         when(warehouseStore.countAllWarehousesByBuCode("BU123")).thenReturn(5);
 
-        boolean isFeasible = warehouseValidation.checkLocationAndWarehouseFeasibility(warehouse);
+        boolean isFeasible = warehouseValidation.isLocationAndWarehouseFeasible(warehouse);
 
         verify(locationResolver, times(1)).resolveByIdentifier("ValidLocation");
         verify(warehouseStore, times(1)).countAllWarehousesByBuCode("BU123");

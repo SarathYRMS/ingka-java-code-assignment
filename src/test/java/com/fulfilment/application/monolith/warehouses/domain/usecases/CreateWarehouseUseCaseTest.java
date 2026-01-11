@@ -2,10 +2,7 @@ package com.fulfilment.application.monolith.warehouses.domain.usecases;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +13,7 @@ import com.fulfilment.application.monolith.warehouses.domain.ports.WarehouseStor
 import com.fulfilment.application.monolith.warehouses.domain.validation.WarehouseValidation;
 import com.fulfilment.application.monolith.warehouses.exception.WarehouseException;
 
-public class CreateWarehouseUseCaseTest {
+class CreateWarehouseUseCaseTest {
     private WarehouseStore warehouseStore;
     private WarehouseValidation warehouseValidation;
     private CreateWarehouseUseCase createWarehouseUseCase;
@@ -31,7 +28,8 @@ public class CreateWarehouseUseCaseTest {
     @Test
     void givenInvalidWareHouseThenThrowException() {
         Warehouse warehouse = new Warehouse();
-        when(warehouseValidation.validateWarehouse(warehouse)).thenReturn(null);
+        doNothing().when(warehouseValidation).validateWarehouse(warehouse);
+        doThrow(new WarehouseException("Validation failed", 400)).when(warehouseValidation).validateWarehouse(warehouse);
 
         assertThrows(WarehouseException.class, () -> createWarehouseUseCase.create(warehouse));
         verify(warehouseValidation, times(1)).validateWarehouse(warehouse);
@@ -41,13 +39,13 @@ public class CreateWarehouseUseCaseTest {
     @Test
     void givenValidWarehouseThenCreateNewWarehouse() {
         Warehouse warehouse = new Warehouse();
-        Warehouse validatedWarehouse = new Warehouse();
-        when(warehouseValidation.validateWarehouse(warehouse)).thenReturn(validatedWarehouse);
+        warehouse.setBusinessUnitCode("BU123");
+        doNothing().when(warehouseValidation).validateWarehouse(warehouse);
 
-        final com.warehouse.api.beans.Warehouse warehouse1 = createWarehouseUseCase.create(warehouse);
+        com.warehouse.api.beans.Warehouse warehouse1 = createWarehouseUseCase.create(warehouse);
         assertNotNull(warehouse1);
 
         verify(warehouseValidation, times(1)).validateWarehouse(warehouse);
-        verify(warehouseStore, times(1)).create(validatedWarehouse);
+        verify(warehouseStore, times(1)).create(warehouse);
     }
 }

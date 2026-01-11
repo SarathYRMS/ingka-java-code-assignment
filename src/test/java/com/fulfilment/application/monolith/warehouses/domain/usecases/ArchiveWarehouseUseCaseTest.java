@@ -12,7 +12,7 @@ import com.fulfilment.application.monolith.warehouses.domain.models.Warehouse;
 import com.fulfilment.application.monolith.warehouses.domain.ports.WarehouseStore;
 import com.fulfilment.application.monolith.warehouses.exception.WarehouseException;
 
-public class ArchiveWarehouseUseCaseTest {
+class ArchiveWarehouseUseCaseTest {
 
     private WarehouseStore warehouseStore;
     private ArchiveWarehouseUseCase archiveWarehouseUseCase;
