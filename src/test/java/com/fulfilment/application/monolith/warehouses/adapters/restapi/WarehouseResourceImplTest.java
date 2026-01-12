@@ -1,5 +1,6 @@
 package com.fulfilment.application.monolith.warehouses.adapters.restapi;
 
+import com.fulfilment.application.monolith.util.Constants;
 import com.fulfilment.application.monolith.warehouses.adapters.database.WarehouseRepository;
 import com.fulfilment.application.monolith.warehouses.domain.models.Warehouse;
 import com.fulfilment.application.monolith.warehouses.domain.usecases.ArchiveWarehouseUseCase;
@@ -116,7 +117,7 @@ class WarehouseResourceImplTest {
 
         // when & then
         WarehouseException exception = assertThrows(WarehouseException.class, () -> warehouseResource.getAWarehouseUnitByID(id));
-        assertEquals("Warehouse with the specified ID 1 does not exist.", exception.getMessage());
+        assertEquals(String.format(Constants.ID_NOT_FOUNT, id), exception.getMessage());
     }
 
     @Test

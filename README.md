@@ -85,6 +85,14 @@ Navigate to:
 Navigate to:
 <http://localhost:8080/health>
 
+## Access the Application code coverage through JaCoCo Tool
+
+Navigate to:
+<http://localhost:63342/ingka-java-code-assignment/target/site/jacoco/index.html>
+
+## CI/CD Pipeline
+Refer the template `.github/workflows/deploy.yml` is designed to deploy the application to Azure Web App.
+
 ## See the demo in your browser
 
 Navigate to:

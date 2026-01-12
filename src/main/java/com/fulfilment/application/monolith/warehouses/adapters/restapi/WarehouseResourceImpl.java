@@ -24,7 +24,6 @@ import static com.fulfilment.application.monolith.util.Constants.ID_NOT_FOUNT;
 @ApplicationScoped
 public class WarehouseResourceImpl implements WarehouseResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(WarehouseResourceImpl.class);
-
     private final WarehouseRepository warehouseRepository;
     private final ArchiveWarehouseUseCase archiveWarehouseUseCase;
     private final CreateWarehouseUseCase createWarehouseUseCase;
@@ -50,7 +49,7 @@ public class WarehouseResourceImpl implements WarehouseResource {
     @Override
     @Transactional
     public Warehouse replaceAWarehouseUnit(Warehouse data) {
-        LOGGER.info("Replacing a warehouse unit with data: {}", JsonString.getValueAsString(data));
+        LOGGER.debug("Replacing a warehouse unit with data: {}", JsonString.getValueAsString(data));
         var warehouseDomainModel = getDomainWarehouse(data);
 
         return replaceWarehouseUseCase.replace(warehouseDomainModel);
@@ -59,7 +58,7 @@ public class WarehouseResourceImpl implements WarehouseResource {
     @Override
     @Transactional
     public Warehouse createANewWarehouseUnit(@NotNull Warehouse data) {
-        LOGGER.info("Creating a new warehouse unit with data: {}", JsonString.getValueAsString(data));
+        LOGGER.debug("Creating a new warehouse unit with data: {}", JsonString.getValueAsString(data));
         var warehouseDomainModel = getDomainWarehouse(data);
 
         return createWarehouseUseCase.create(warehouseDomainModel);
@@ -77,7 +76,7 @@ public class WarehouseResourceImpl implements WarehouseResource {
     @Override
     @Transactional
     public void archiveAWarehouseUnitByID(long id) {
-        LOGGER.info("Archiving warehouse unit with ID: {}", id);
+        LOGGER.debug("Archiving warehouse unit with ID: {}", id);
         var warehouse = warehouseRepository.findByWarehouseId(id);
 
         archiveWarehouseUseCase.archive(warehouse);

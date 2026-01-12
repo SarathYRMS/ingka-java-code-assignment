@@ -17,12 +17,4 @@ public class JsonString {
             throw new IllegalArgumentException(exception.getMessage(), exception);
         }
     }
-
-    public static <T> T getValueAsObject(String jsonString, Class<T> clazz) {
-        try {
-            return OBJECT_MAPPER.readValue(jsonString, clazz);
-        } catch (JsonProcessingException exception) {
-            throw new IllegalArgumentException(exception.getMessage(), exception);
-        }
-    }
 }

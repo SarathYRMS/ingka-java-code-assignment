@@ -29,21 +29,21 @@ import org.jboss.logging.Logger;
 @Produces("application/json")
 @Consumes("application/json")
 public class StoreResource {
-
+    private static final Logger LOGGER = Logger.getLogger(StoreResource.class.getName());
     @Inject
     LegacyStoreManagerGateway legacyStoreManagerGateway;
-
-    private static final Logger LOGGER = Logger.getLogger(StoreResource.class.getName());
+    @Inject
+    StoreRepository storeRepository;
 
     @GET
     public List<Store> get() {
-        return Store.listAll(Sort.by("name"));
+        return storeRepository.listAll(Sort.by("name"));
     }
 
     @GET
     @Path("{id}")
     public Store getSingle(Long id) {
-        Store entity = Store.findById(id);
+        Store entity = storeRepository.findById(id);
         if (entity == null) {
             throw new WebApplicationException(String.format(Constants.STORE_ID_NOT_EXISTS, id), 404);
         }
@@ -57,7 +57,7 @@ public class StoreResource {
             throw new WebApplicationException(Constants.INVALID_STORE_ID, 422);
         }
 
-        store.persist();
+        storeRepository.persist(store);
 
         legacyStoreManagerGateway.createStoreOnLegacySystem(store);
 
@@ -72,7 +72,7 @@ public class StoreResource {
             throw new WebApplicationException(Constants.STORE_NAME_NOT_FOUND, 422);
         }
 
-        Store entity = Store.findById(id);
+        Store entity = storeRepository.findById(id);
 
         if (entity == null) {
             throw new WebApplicationException(String.format(Constants.STORE_ID_NOT_EXISTS, id), 404);
@@ -94,7 +94,7 @@ public class StoreResource {
             throw new WebApplicationException(Constants.STORE_NAME_NOT_FOUND, 422);
         }
 
-        Store entity = Store.findById(id);
+        Store entity = storeRepository.findById(id);
 
         if (entity == null) {
             throw new WebApplicationException(String.format(Constants.STORE_ID_NOT_EXISTS, id), 404);
@@ -117,11 +117,11 @@ public class StoreResource {
     @Path("{id}")
     @Transactional
     public Response delete(Long id) {
-        Store entity = Store.findById(id);
+        Store entity = storeRepository.findById(id);
         if (entity == null) {
             throw new WebApplicationException(String.format(Constants.STORE_ID_NOT_EXISTS, id), 404);
         }
-        entity.delete();
+        storeRepository.delete(entity);
         return Response.status(204).build();
     }
 
@@ -129,7 +129,7 @@ public class StoreResource {
     public static class ErrorMapper implements ExceptionMapper<Exception> {
 
         @Inject
-        ObjectMapper objectMapper;
+        public ObjectMapper objectMapper;
 
         @Override
         public Response toResponse(Exception exception) {
