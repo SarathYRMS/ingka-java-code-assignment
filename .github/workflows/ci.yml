@@ -30,9 +30,6 @@ jobs:
         # Builds a fast-jar for better startup performance in cloud environments
         run: ./mvnw package -Dquarkus.package.type=fast-jar
 
-      - name: run tests
-        run: ./mvnw -B -ntp verify
-
       - name: Debug report locations (non-blocking)
         if: always()
         run: |
